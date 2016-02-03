@@ -1,8 +1,28 @@
 #!/bin/bash
 
+# Installation
 PHALCON="v2.0.9"
 
-echo "Provisioning Development Environment for the Mukuru Assessment"
+echo "Provisioning Development Environment"
+apt-get -y update > /dev/null
+
+echo "Installing PHP packages and dependencies"
+apt-get -y install php5 php5-mcrypt php5-fpm php5-mysql php5-json php5-dev php5-curl php5-common php5-cli > /dev/null
+
+echo "Installing nginx webserver"
+apt-get -y install nginx-extras > /dev/null
+
+# Password is intentionally insecure for development purposes, this would never happen in production :)
+echo "Installing MySQL"
+sudo debconf-set-selections <<< 'mysql-server-5.6 mysql-server/root_password password rootpass'
+sudo debconf-set-selections <<< 'mysql-server-5.6 mysql-server/root_password_again password rootpass'
+apt-get -y install mysql-server-5.6 > /dev/null
+
+echo "Installing git"
+apt-get -y install git > /dev/null
+
+echo "Installing Phalcon dependencies"
+apt-get -y install build-essential libpcre3-dev > /dev/null
 
 echo "Installing Phalcon"
 echo "Cloning Phalcon Repository"
@@ -22,10 +42,7 @@ echo "Installing Composer"
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 
-echo "Installing Codeception"
-wget -O /usr/local/bin/codecept http://codeception.com/codecept.phar
-chmod a+rx /usr/local/bin/codecept
-
+# Configuration
 echo "Configuring Nginx"
 cp /vagrant/vagrant/config/nginx_vhost /etc/nginx/sites-available/nginx_vhost > /dev/null
 ln -s /etc/nginx/sites-available/nginx_vhost /etc/nginx/sites-enabled/
@@ -33,7 +50,9 @@ rm -rf /etc/nginx/sites-available/default
 service nginx restart > /dev/null
 service php5-fpm restart > /dev/null
 
-# TODO: Insert Database configuration here
+echo "Setting up MySQL database"
+mysqladmin -u root -prootpass create forex
+echo "GRANT UPDATE,DELETE,SELECT,INSERT ON forex.* TO forex@'localhost' IDENTIFIED BY 'f0r3x'" > mysql
 
 echo "Installing Composer Dependencies"
 cd /vagrant
