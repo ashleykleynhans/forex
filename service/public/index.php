@@ -1,5 +1,5 @@
 <?php
-require dirname(__DIR__) . '/vendor/autoload.php';
+require dirname(__DIR__) . '/../vendor/autoload.php';
 
 use Phalcon\Mvc\Micro\Collection as MicroCollection;
 
@@ -15,7 +15,7 @@ try {
     //error_reporting(0);
     ini_set('display_errors', 1);
 
-    $config = include __DIR__ . '/../app/config/config_local.php';
+    $config = include __DIR__ . '/../app/config/config.php';
 
     /**
      * Read auto-loader
