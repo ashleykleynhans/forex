@@ -1,0 +1,8 @@
+{
+    "name": "Mukuru Test",
+    "description": "Mukuru Test",
+    "license": "proprietary",
+    "require": {
+        "php": ">=5.5",
+    }
+}
