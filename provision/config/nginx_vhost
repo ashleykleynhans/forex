@@ -26,7 +26,7 @@ server {
         fastcgi_param PATH_INFO       $fastcgi_path_info;
         fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param DB_PASSWORD     "rootpass";
+        fastcgi_param DB_PASSWORD     "f0r3x";
     }
 
     location ~* ^/(css|img|js|flv|swf|download)/(.+)$ {

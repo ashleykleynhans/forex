@@ -45,6 +45,7 @@ CREATE TABLE `orders` (
   `surcharge_amount` DECIMAL(11,2) UNSIGNED NOT NULL,
   `discount_amount` DECIMAL(10,2) UNSIGNED NOT NULL,
   `date_created` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`order_id`),
   FOREIGN KEY (`currency_code`) REFERENCES `currencies` (`currency_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

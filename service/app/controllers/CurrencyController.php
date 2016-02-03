@@ -13,11 +13,11 @@ class CurrencyController extends BaseController
     {
         $data = $this->request->getJsonRawBody();
 
-        if (!is_object($data) || !isset($data->currency_id) || !isset($data->currency_name)) {
+        if (!is_object($data) || !isset($data->currency_code) || !isset($data->currency_name)) {
             $this->sendError('INVALID_PARAMS', 400);
         }
 
-        $exists = Currency::getCurrency($data->currency_id);
+        $exists = Currency::getCurrency($data->currency_code);
 
         if ($exists) {
             $this->sendError('CURRENCY_ALREADY_EXISTS', 400);
@@ -34,25 +34,25 @@ class CurrencyController extends BaseController
 
     /**
      * Update an existing currency
-     * @param $currencyId
+     * @param $currencyCode
      */
-    public function updateCurrency($currencyId = null)
+    public function updateCurrency($currencyCode = null)
     {
-        if (!isset($currencyId)) {
+        if (!isset($currencyCode)) {
             $this->sendError('INVALID_PARAMS', 400);
         }
 
         $data = $this->request->getJsonRawBody();
-        $currency = Currency::getCurrency($currencyId);
+        $currency = Currency::getCurrency($currencyCode);
 
         if (!$currency) {
             $this->sendError('CURRENCY_NOT_FOUND', 404);
         }
 
-        $currency = Currency::updateCurrency($currencyId, $data);
+        $currency = Currency::updateCurrency($currencyCode, $data);
 
         if ($currency) {
-            $this->sendSuccess($currencyId);
+            $this->sendSuccess($currencyCode);
         } else {
             $this->sendError('UNABLE_TO_UPDATE_CURRENCY', 500);
         }
@@ -60,15 +60,15 @@ class CurrencyController extends BaseController
 
     /**
      * Get currency detail
-     * @param null $currencyId
+     * @param null $currencyCode
      */
-    public function getCurrency($currencyId = null)
+    public function getCurrency($currencyCode = null)
     {
-        if (!isset($currencyId)) {
+        if (!isset($currencyCode)) {
             $this->sendError('INVALID_PARAMS', 400);
         }
 
-        $data = Currency::getCurrency($currencyId);
+        $data = Currency::getCurrency($currencyCode);
 
         if ($data) {
             $this->sendSuccess($data);
@@ -79,21 +79,21 @@ class CurrencyController extends BaseController
 
     /**
      * Delete an entry
-     * @param null $currencyId
+     * @param null $currencyCode
      */
-    public function deleteCurrency($currencyId = null)
+    public function deleteCurrency($currencyCode = null)
     {
-        if (!isset($currencyId)) {
+        if (!isset($currencyCode)) {
             $this->sendError('INVALID_PARAMS', 400);
         }
 
-        $currency = Currency::getCurrency($currencyId);
+        $currency = Currency::getCurrency($currencyCode);
 
         if (!$currency) {
             $this->sendError('CURRENCY_NOT_FOUND', 404);
         }
 
-        $result = Currency::deleteCurrency($currencyId);
+        $result = Currency::deleteCurrency($currencyCode);
 
         if ($result) {
             $this->sendSuccess(ResponseMessages::CURRENCY_DELETED_SUCCESSFULLY);

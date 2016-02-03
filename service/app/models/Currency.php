@@ -12,22 +12,20 @@ class Currency extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        parent::initialize();
-
         $this->setSource('currencies');
     }
 
     /**
      * Get an existing entry from the DB
-     * @param $currencyId
+     * @param $currencyCode
      * @return mixed
      */
-    public static function getCurrency($currencyId)
+    public static function getCurrency($currencyCode)
     {
         return self::findFirst([
-            'currency_id  = :currency_id:',
+            'currency_code  = :currency_code:',
             'bind' => [
-                'currency_id' => $currencyId
+                'currency_code' => $currencyCode
             ]
         ]);
     }
@@ -61,13 +59,13 @@ class Currency extends \Phalcon\Mvc\Model
 
     /**
      * Update a currency in the DB
-     * @param $currencyId
+     * @param $currencyCode
      * @param $data
      * @return bool
      */
-    public static function updateCurrency($currencyId, $data)
+    public static function updateCurrency($currencyCode, $data)
     {
-        $currency = self::getCurrency($currencyId);
+        $currency = self::getCurrency($currencyCode);
 
         if ($currency) {
             foreach ($data as $key => $value) {
@@ -82,12 +80,12 @@ class Currency extends \Phalcon\Mvc\Model
 
     /**
      * "Delete" a currency in the DB by setting status to disabled (soft delete)
-     * @param $currencyId
+     * @param $currencyCode
      * @return bool
      */
-    public static function deleteCurrency($currencyId)
+    public static function deleteCurrency($currencyCode)
     {
-        $currency = self::getCurrency($currencyId);
+        $currency = self::getCurrency($currencyCode);
 
         if ($currency) {
             $currency->status = 'disabled';

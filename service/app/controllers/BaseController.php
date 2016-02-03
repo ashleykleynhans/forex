@@ -30,12 +30,11 @@ class BaseController extends \Phalcon\Mvc\Controller implements IJSend
 
     /**
      * Send an error response if an API call failed
-     * @param $message
      * @param $errorCode
      * @param int $httpStatusCode
      * @param null $data
      */
-    public function sendError($message, $errorCode, $httpStatusCode = 500, $data = null)
+    public function sendError($errorCode, $httpStatusCode = 500, $data = null)
     {
         $response = [
             'status'  => 'error',
