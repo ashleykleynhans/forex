@@ -30,10 +30,10 @@ cd /usr/local/src
 git clone https://github.com/phalcon/cphalcon.git > /dev/null 2>&1
 cd cphalcon
 echo "Checking out tag $PHALCON"
-git checkout phalcon-$PHALCON
+git checkout phalcon-$PHALCON > /dev/null 2>&1
 echo "Building and installing Phalcon"
 cd build
-./install
+./install > /dev/null 2>&1
 echo "extension=phalcon.so" > /etc/php5/mods-available/phalcon.ini
 ln -s /etc/php5/mods-available/phalcon.ini /etc/php5/cli/conf.d/20-phalcon.ini
 ln -s /etc/php5/mods-available/phalcon.ini /etc/php5/fpm/conf.d/20-phalcon.ini
@@ -44,7 +44,7 @@ mv composer.phar /usr/local/bin/composer
 
 # Configuration
 echo "Configuring Nginx"
-cp /vagrant/vagrant/config/nginx_vhost /etc/nginx/sites-available/nginx_vhost > /dev/null 2>&1
+cp /vagrant/provision/config/nginx_vhost /etc/nginx/sites-available/nginx_vhost > /dev/null 2>&1
 ln -s /etc/nginx/sites-available/nginx_vhost /etc/nginx/sites-enabled/
 rm -rf /etc/nginx/sites-available/default
 service nginx restart > /dev/null
@@ -52,7 +52,8 @@ service php5-fpm restart > /dev/null
 
 echo "Setting up MySQL database"
 mysqladmin -u root -prootpass create forex > /dev/null 2>&1
-echo "GRANT UPDATE,DELETE,SELECT,INSERT ON forex.* TO forex@'localhost' IDENTIFIED BY 'f0r3x'" > mysql
+echo "GRANT UPDATE,DELETE,SELECT,INSERT ON forex.* TO forex@'localhost' IDENTIFIED BY 'f0r3x'" | mysql -u root -prootpass > /dev/null 2>&1
+mysql -u root -prootpass < /vagrant/sql/forex.sql > /dev/null 2>&1
 
 echo "Installing Composer Dependencies"
 cd /vagrant
