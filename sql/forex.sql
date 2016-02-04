@@ -50,11 +50,17 @@ CREATE TABLE `orders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `order_emails` (
-  `email_id` SMALLINT(5) UNSIGNED NOT NULL,
+  `email_id` SMALLINT(5) UNSIGNED NOT NULL AUTO_INCREMENT,
   `currency_code` CHAR(3) NOT NULL,
   `email_address` VARCHAR(255) NOT NULL,
   `email_status` enum('enabled', 'disabled') DEFAULT 'enabled',
   `date_created` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`email_id`),
   FOREIGN KEY (`currency_code`) REFERENCES `currencies` (`currency_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `order_emails`
+  (`currency_code`, `email_address`)
+VALUES
+  ('GBP', 'email@example.com');

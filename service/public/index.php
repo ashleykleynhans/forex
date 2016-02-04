@@ -51,24 +51,24 @@ try {
     /**
      * Expose the /v1/rates end point
      */
-    $rate = new MicroCollection();
-    $rate->setHandler('RateController', true);
-    $rate->setPrefix('/v1/rates');
-    $rate->post('/', 'addRate');
-    $rate->put('/{code}', 'updateRate');
-    $rate->get('/{code}', 'getRate');
-    $app->mount($rate);
+    $rates = new MicroCollection();
+    $rates->setHandler('RateController', true);
+    $rates->setPrefix('/v1/rates');
+    $rates->post('/', 'addRate');
+    $rates->put('/{code}', 'updateRate');
+    $rates->get('/{code}', 'getRate');
+    $app->mount($rates);
 
     /**
      * Expose the /v1/emails end point
      */
-    $rate = new MicroCollection();
-    $rate->setHandler('EmailController', true);
-    $rate->setPrefix('/v1/emails');
-    $rate->post('/', 'addEmailAddress');
-    $rate->put('/{code}', 'updateEmailAddress');
-    $rate->get('/{code}', 'getEmailAddress');
-    $app->mount($rate);
+    $emails = new MicroCollection();
+    $emails->setHandler('EmailController', true);
+    $emails->setPrefix('/v1/emails');
+    $emails->post('/', 'addEmailAddress');
+    $emails->put('/{code}/{email}', 'updateEmailAddress');
+    $emails->get('/{code}/{email}', 'getEmailAddress');
+    $app->mount($emails);
 
     /**
      * Not found handler

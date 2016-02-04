@@ -36,17 +36,20 @@ class Email extends \Phalcon\Mvc\Model
      */
     public static function getEmailAddress($currencyCode, $emailAddress)
     {
-        return self::findFirst(
-            [
-                'currency_code = :currency_code:',
-                'email_address = :email_address:',
-                'bind' => [
+        return self::query()
+            ->columns('*')
+            ->where('currency_code = :currency_code:')
+            ->andWhere('email_address = :email_address:')
+            ->andWhere('email_status = :email_status:')
+            ->bind(
+                [
                     'currency_code' => $currencyCode,
                     'email_address' => $emailAddress,
                     'email_status'  => 'enabled'
                 ]
-            ]
-        );
+            )
+            ->execute()
+            ->getFirst();
     }
 
     /**
