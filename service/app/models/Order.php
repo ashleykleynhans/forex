@@ -9,7 +9,7 @@ class Order extends \Phalcon\Mvc\Model
 {
     /**
      * Send an email notification
-     * @param $emailAddress
+     * @param $emailAddresses
      * @param $order
      */
     private static function sendEmail($emailAddresses, $order)
@@ -36,7 +36,9 @@ class Order extends \Phalcon\Mvc\Model
             ];
         }, $emailAddresses);
 
+        // @FIXME: Keep getting 'invalid-sender' errors for some reason
         $result = $mandrill->messages->send($message, true, 'Main Pool');
+        var_dump($result);
 
         return $result;
     }
@@ -53,9 +55,11 @@ class Order extends \Phalcon\Mvc\Model
             return;
         }
 
-        $emailAddresses = array_map(function($email) {
-            return $email->email_address;
-        }, $emails);
+        $emailAddresses = [];
+
+        foreach ($emails as $email) {
+            $emailAddresses[] = $email->email_address;
+        }
 
         self::sendEmail($emailAddresses, $order);
     }

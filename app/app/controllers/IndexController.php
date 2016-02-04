@@ -1,14 +1,14 @@
 <?php
 
-class IndexController extends \Phalcon\Mvc\Controller
+class IndexController extends BaseController
 {
 
     /**
      * Display the landing page
      */
-    public function index()
+    public function indexAction()
     {
-
+        echo $this->view->render('index');
     }
 
 }
