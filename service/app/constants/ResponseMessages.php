@@ -42,6 +42,15 @@ class ResponseMessages
     const UNABLE_TO_DELETE_EMAIL = 'Unable to delete email';
 
     /**
+     * Order Error Messages
+     */
+    const ORDER_NOT_FOUND = 'Order not found';
+    const ORDER_ALREADY_EXISTS = 'Order already exists';
+    const UNABLE_TO_SAVE_ORDER = 'Unable to save order';
+    const UNABLE_TO_UPDATE_ORDER = 'Unable to update order';
+    const UNABLE_TO_DELETE_ORDER = 'Unable to delete order';
+
+    /**
      * Currency Success Messages
      */
     const CURRENCY_DELETED_SUCCESSFULLY = 'Currency deleted successfully';

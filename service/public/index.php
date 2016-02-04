@@ -71,6 +71,15 @@ try {
     $app->mount($emails);
 
     /**
+     * Expose the /v1/orders end point
+     */
+    $orders = new MicroCollection();
+    $orders->setHandler('OrderController', true);
+    $orders->setPrefix('/v1/orders');
+    $orders->post('/', 'addOrder');
+    $app->mount($orders);
+
+    /**
      * Not found handler
      */
     $app->notFound(function () use ($app) {

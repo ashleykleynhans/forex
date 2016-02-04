@@ -2,7 +2,7 @@
 
 /**
  * Class Email
- * Email Model
+ * Email Address Model
  * @author Ashley Kleynhans <ashley.kleynhans@gmail.com>
  */
 class Email extends \Phalcon\Mvc\Model
