@@ -17,7 +17,7 @@ class OrderController extends BaseController
             $this->sendError('INVALID_PARAMS', 400);
         }
 
-        $order = Order::addOrder($data);
+        $order = Order::addOrder($data->currency_code, $data->currency_amount);
 
         if ($order) {
             $this->sendSuccess($order);

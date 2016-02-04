@@ -29,7 +29,7 @@ MSG;
      */
     private static function sendEmailNotification($order)
     {
-        $emails = Email::getEmailAddresses($order->currencyCode);
+        $emails = Email::getAllEmailAddresses($order->currency_code);
 
         if (!$emails) {
             return;
@@ -70,19 +70,81 @@ MSG;
     }
 
     /**
-     * Add a new order to the DB
-     * @param $data
-     * @return bool
+     * Calculate a forex order
+     * @param $currencyCode
+     * @param null $currencyAmount
+     * @param null $payableAmount
+     * @param bool $applyDiscount
+     * @return bool|Order
      */
-    public static function addOrder($data)
+    public static function calculateOrder($currencyCode, $currencyAmount = null, $payableAmount = null, $applyDiscount = false)
     {
-        $order = new self();
-
-        foreach ($data as $key => $value) {
-            $order->$key = $value;
+        if (!isset($currencyAmount) && !isset($payableAmount)) {
+            return false;
         }
 
+        $currencyData = Currency::getCurrency($currencyCode);
+
+        if (!$currencyData) {
+            return false;
+        }
+
+        $order = new self();
+        $order->currency_code = $currencyCode;
+        $order->exchange_rate = $currencyData->rate->exchange_rate;
+        $order->surcharge_percentage = $currencyData->currency->currency_surcharge;
+        $order->discount_amount = 0;
+
+        if (isset($currencyAmount)) {
+            $order->currency_amount = $currencyAmount;
+
+            // Calculate the initial currency conversion before surcharges and discounts
+            $order->payable_amount = $currencyAmount * (1 / $currencyData->rate->exchange_rate);
+
+            // Calculate the surcharge
+            $order->surcharge_amount = $order->payable_amount / 100 * $order->surcharge_percentage;
+
+            // Add the surcharge to the amount payable
+            $order->payable_amount += $order->surcharge_amount;
+        } else {
+            $order->payable_amount = $payableAmount;
+
+            // Calculate the surcharge amount based on the amount the buyer is prepared to pay for the transaction
+            // @FIXME:
+            //$order->surcharge_amount = ($payableAmount * 100 / $order->surcharge_percentage) - ($order->surcharge_percentage * 10);
+
+            // Deduct the surcharge from the payable amount
+            //$order->currency_amount = $order->payable_amount - $order->surcharge_amount;
+            //$order->payable_amount = $currencyAmount * (1 / $currencyData->rate->exchange_rate);
+        }
+
+        // Apply the discount if one is available
+        if ($applyDiscount && $currencyData->currency->currency_discount > 0) {
+            $order->discount_amount = $order->payable_amount / 100 * $order->discount_amount;
+            $order->payable_amount -= $order->discount_amount;
+        }
+
+        return $order;
+    }
+
+    /**
+     * Generate a new order and save it to the DB
+     *
+     * While the currencies are being updated, the order being generated could
+     * potentially cause the actual order amounts to differ from the quoted amount,
+     * in the real world, we would first save a quote and convert the quote to an order.
+     * For the assessment purposes, I'm making an assumption that its a non issue.
+     *
+     * @param $currencyCode
+     * @paarm $currencyAmount
+     * @return bool
+     */
+    public static function addOrder($currencyCode, $currencyAmount)
+    {
+        $order = self::calculateOrder($currencyCode, $currencyAmount);
+
         try {
+
             if ($order->create()) {
                 // Logic within sendEmailNotification() will determine whether or not emails should actually be sent
                 self::sendEmailNotification($order);
