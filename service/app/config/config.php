@@ -14,4 +14,6 @@ return new \Phalcon\Config([
         'charset'    => 'utf8',
         'debug'      => false,
     ],
+
+    'mandrill_api_key' => getenv('MANDRILL_API_KEY')
 ]);

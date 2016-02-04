@@ -44,9 +44,12 @@ mv composer.phar /usr/local/bin/composer
 
 # Configuration
 echo "Configuring Nginx"
-cp /vagrant/provision/config/nginx_vhost /etc/nginx/sites-available/nginx_vhost > /dev/null 2>&1
-ln -s /etc/nginx/sites-available/nginx_vhost /etc/nginx/sites-enabled/
 rm -rf /etc/nginx/sites-available/default
+rm -rf /etc/nginx/sites-enabled/default
+cp /vagrant/provision/config/nginx/service /etc/nginx/sites-available/service > /dev/null 2>&1
+cp /vagrant/provision/config/nginx/app /etc/nginx/sites-available/app > /dev/null 2>&1
+ln -s /etc/nginx/sites-available/service /etc/nginx/sites-enabled/
+ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/
 service nginx restart > /dev/null
 service php5-fpm restart > /dev/null
 
@@ -61,4 +64,4 @@ composer update > /dev/null 2>&1
 
 echo "Updating hosts file"
 echo "127.0.0.1  api.forex" >> /etc/hosts
-echo "127.0.0.1  web.forex" >> /etc/hosts
+echo "127.0.0.1  app.forex" >> /etc/hosts
