@@ -14,8 +14,14 @@ apt-get -y install nginx-extras > /dev/null 2>&1
 
 # Password is intentionally insecure for development purposes, this would never happen in production :)
 echo "Installing MySQL"
-sudo debconf-set-selections <<< 'mysql-server-5.6 mysql-server/root_password password rootpass'
-sudo debconf-set-selections <<< 'mysql-server-5.6 mysql-server/root_password_again password rootpass'
+debconf-set-selections <<< 'mysql-server-5.6 mysql-server/root_password password rootpass'
+debconf-set-selections <<< 'mysql-server-5.6 mysql-server/root_password_again password rootpass'
+
+echo "Installing Postfix (SMTP)"
+debconf-set-selections <<< "postfix postfix/mailname string $HOSTNAME"
+debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
+apt-get -y install postfix > /dev/null 2>&1
+
 apt-get -y install mysql-server-5.6 > /dev/null 2>&1
 
 echo "Installing git"
