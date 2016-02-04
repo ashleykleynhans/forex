@@ -37,7 +37,7 @@ class Currency extends \Phalcon\Mvc\Model
     public static function getCurrency($currencyCode)
     {
         return self::query()
-            ->columns('*')
+            ->columns('Currency.currency_code, currency_name, currency_surcharge, currency_discount, rate.exchange_rate')
             ->leftJoin('rate', 'rate.currency_code = Currency.currency_code')
             ->where('Currency.currency_code = :currency_code:')
             ->andWhere('currency_status = :currency_status:')
@@ -49,6 +49,25 @@ class Currency extends \Phalcon\Mvc\Model
             )
             ->execute()
             ->getFirst();
+    }
+
+    /**
+     * Get all available currency data
+     * @return mixed
+     */
+    public static function getAllCurrencies()
+    {
+        return self::query()
+            ->columns('Currency.currency_code, currency_name, currency_surcharge, currency_discount, rate.exchange_rate')
+            ->leftJoin('rate', 'rate.currency_code = Currency.currency_code')
+            ->where('currency_status = :currency_status:')
+            ->bind(
+                [
+                    'currency_status' => 'enabled'
+                ]
+            )
+            ->execute()
+            ->toArray();
     }
 
     /**

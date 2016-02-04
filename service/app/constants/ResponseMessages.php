@@ -22,6 +22,7 @@ class ResponseMessages
     const UNABLE_TO_SAVE_CURRENCY = 'Unable to save currency';
     const UNABLE_TO_UPDATE_CURRENCY = 'Unable to update currency';
     const UNABLE_TO_DELETE_CURRENCY = 'Unable to delete currency';
+    const NO_CURRENCY_DATA_FOUND = 'No currency data found';
 
     /**
      * Rate Error Messages

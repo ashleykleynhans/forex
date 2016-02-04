@@ -108,23 +108,23 @@ class Order extends \Phalcon\Mvc\Model
             return false;
         }
 
-        $currencyData = Currency::getCurrency($currencyCode);
+        $currency = Currency::getCurrency($currencyCode);
 
-        if (!$currencyData) {
+        if (!$currency) {
             return false;
         }
 
         $order = new self();
         $order->currency_code = $currencyCode;
-        $order->exchange_rate = $currencyData->rate->exchange_rate;
-        $order->surcharge_percentage = $currencyData->currency->currency_surcharge;
+        $order->exchange_rate = $currency->exchange_rate;
+        $order->surcharge_percentage = $currency->currency_surcharge;
         $order->discount_amount = 0;
 
         if (isset($currencyAmount)) {
             $order->currency_amount = $currencyAmount;
 
             // Calculate the initial currency conversion before surcharges and discounts
-            $order->payable_amount = $currencyAmount * (1 / $currencyData->rate->exchange_rate);
+            $order->payable_amount = $currencyAmount * (1 / $currency->exchange_rate);
 
             // Calculate the surcharge
             $order->surcharge_amount = $order->payable_amount / 100 * $order->surcharge_percentage;
@@ -140,11 +140,11 @@ class Order extends \Phalcon\Mvc\Model
 
             // Deduct the surcharge from the payable amount
             //$order->currency_amount = $order->payable_amount - $order->surcharge_amount;
-            //$order->payable_amount = $currencyAmount * (1 / $currencyData->rate->exchange_rate);
+            //$order->payable_amount = $currencyAmount * (1 / $currency->exchange_rate);
         }
 
         // Apply the discount if one is available
-        if ($applyDiscount && $currencyData->currency->currency_discount > 0) {
+        if ($applyDiscount && $currency->currency_discount > 0) {
             $order->discount_amount = $order->payable_amount / 100 * $order->discount_amount;
             $order->payable_amount -= $order->discount_amount;
         }

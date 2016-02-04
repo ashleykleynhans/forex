@@ -78,6 +78,20 @@ class CurrencyController extends BaseController
     }
 
     /**
+     * Get all available currency data
+     */
+    public function getAllCurrencies()
+    {
+        $data = Currency::getAllCurrencies();
+
+        if ($data) {
+            $this->sendSuccess($data);
+        } else {
+            $this->sendError('NO_CURRENCY_DATA_FOUND', 404);
+        }
+    }
+
+    /**
      * Delete a currency
      * @param null $currencyCode
      */

@@ -43,6 +43,7 @@ try {
     $currency->setHandler('CurrencyController', true);
     $currency->setPrefix('/v1/currency');
     $currency->post('/', 'addCurrency');
+    $currency->get('/', 'getAllCurrencies');
     $currency->put('/{code}', 'updateCurrency');
     $currency->get('/{code}', 'getCurrency');
     $currency->delete('/{code}', 'deleteCurrency');
