@@ -1,5 +1,5 @@
 server {
-    listen      80;
+    listen      9090;
     server_name api.forex;
     set         $root_path /vagrant/service/public;
     root        $root_path;
