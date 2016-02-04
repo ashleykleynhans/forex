@@ -78,7 +78,7 @@ class CurrencyController extends BaseController
     }
 
     /**
-     * Delete an entry
+     * Delete a currency
      * @param null $currencyCode
      */
     public function deleteCurrency($currencyCode = null)

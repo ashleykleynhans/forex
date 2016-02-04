@@ -43,10 +43,21 @@ try {
     $currency->setHandler('CurrencyController', true);
     $currency->setPrefix('/v1/currency');
     $currency->post('/', 'addCurrency');
-    $currency->put('/{id}', 'updateCurrency');
-    $currency->get('/{id}', 'getCurrency');
-    $currency->delete('/{id}', 'deleteCurrency');
+    $currency->put('/{code}', 'updateCurrency');
+    $currency->get('/{code}', 'getCurrency');
+    $currency->delete('/{code}', 'deleteCurrency');
     $app->mount($currency);
+
+    /**
+     * Expose the /v1/rates end point
+     */
+    $rate = new MicroCollection();
+    $rate->setHandler('RateController', true);
+    $rate->setPrefix('/v1/rates');
+    $rate->post('/', 'addrate');
+    $rate->put('/{code}', 'updateRate');
+    $rate->get('/{code}', 'getRate');
+    $app->mount($rate);
 
     /**
      * Not found handler

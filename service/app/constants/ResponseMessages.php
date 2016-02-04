@@ -24,6 +24,15 @@ class ResponseMessages
     const UNABLE_TO_DELETE_CURRENCY = 'Unable to delete currency';
 
     /**
+     * Rate Error Messages
+     */
+    const RATE_NOT_FOUND = 'Rate not found';
+    const RATE_ALREADY_EXISTS = 'Rate already exists';
+    const UNABLE_TO_SAVE_RATE = 'Unable to save rate';
+    const UNABLE_TO_UPDATE_RATE = 'Unable to update rate';
+    const UNABLE_TO_DELETE_RATE = 'Unable to delete rate';
+
+    /**
      * Currency Success Messages
      */
     const CURRENCY_DELETED_SUCCESSFULLY = 'Currency deleted successfully';

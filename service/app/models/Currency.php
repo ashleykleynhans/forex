@@ -13,6 +13,20 @@ class Currency extends \Phalcon\Mvc\Model
     public function initialize()
     {
         $this->setSource('currencies');
+
+        $this->skipAttributesOnCreate(
+            [
+                'currency_status',
+                'date_created',
+                'date_updated'
+            ]
+        );
+
+        $this->skipAttributesOnUpdate(
+            [
+                'date_updated'
+            ]
+        );
     }
 
     /**
@@ -22,12 +36,19 @@ class Currency extends \Phalcon\Mvc\Model
      */
     public static function getCurrency($currencyCode)
     {
-        return self::findFirst([
-            'currency_code  = :currency_code:',
-            'bind' => [
-                'currency_code' => $currencyCode
-            ]
-        ]);
+        return self::query()
+            ->columns('*')
+            ->leftJoin('rate', 'rate.currency_code = Currency.currency_code')
+            ->where('Currency.currency_code = :currency_code:')
+            ->andWhere('currency_status = :currency_status:')
+            ->bind(
+                [
+                    'currency_code'   => $currencyCode,
+                    'currency_status' => 'enabled'
+                ]
+            )
+            ->execute()
+            ->getFirst();
     }
 
     /**
