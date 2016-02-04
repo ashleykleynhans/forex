@@ -29,7 +29,7 @@ class Rate extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Get an existing entry from the DB
+     * Get an existing exchange rate from the DB
      * @param $currencyCode
      * @return mixed
      */
@@ -44,7 +44,7 @@ class Rate extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Add a new rate to the DB
+     * Add a new exchange rate to the DB
      * @param $data
      * @return bool
      */
@@ -69,7 +69,7 @@ class Rate extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Update a rate in the DB
+     * Update an exchange rate in the DB
      * @param $currencyCode
      * @param $data
      * @return bool

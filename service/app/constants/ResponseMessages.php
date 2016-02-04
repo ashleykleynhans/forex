@@ -33,6 +33,15 @@ class ResponseMessages
     const UNABLE_TO_DELETE_RATE = 'Unable to delete rate';
 
     /**
+     * Email Error Messages
+     */
+    const EMAIL_NOT_FOUND = 'Email not found';
+    const EMAIL_ALREADY_EXISTS = 'Email already exists';
+    const UNABLE_TO_SAVE_EMAIL = 'Unable to save email';
+    const UNABLE_TO_UPDATE_EMAIL = 'Unable to update email';
+    const UNABLE_TO_DELETE_EMAIL = 'Unable to delete email';
+
+    /**
      * Currency Success Messages
      */
     const CURRENCY_DELETED_SUCCESSFULLY = 'Currency deleted successfully';

@@ -54,9 +54,20 @@ try {
     $rate = new MicroCollection();
     $rate->setHandler('RateController', true);
     $rate->setPrefix('/v1/rates');
-    $rate->post('/', 'addrate');
+    $rate->post('/', 'addRate');
     $rate->put('/{code}', 'updateRate');
     $rate->get('/{code}', 'getRate');
+    $app->mount($rate);
+
+    /**
+     * Expose the /v1/emails end point
+     */
+    $rate = new MicroCollection();
+    $rate->setHandler('EmailController', true);
+    $rate->setPrefix('/v1/emails');
+    $rate->post('/', 'addEmailAddress');
+    $rate->put('/{code}', 'updateEmailAddress');
+    $rate->get('/{code}', 'getEmailAddress');
     $app->mount($rate);
 
     /**

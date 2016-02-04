@@ -30,7 +30,7 @@ class Currency extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Get an existing entry from the DB
+     * Get an existing currency from the DB
      * @param $currencyCode
      * @return mixed
      */
@@ -79,7 +79,7 @@ class Currency extends \Phalcon\Mvc\Model
     }
 
     /**
-     * Update a currency in the DB
+     * Update an existing currency in the DB
      * @param $currencyCode
      * @param $data
      * @return bool
@@ -115,4 +115,5 @@ class Currency extends \Phalcon\Mvc\Model
 
         return false;
     }
+
 }
