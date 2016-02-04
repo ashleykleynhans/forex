@@ -56,7 +56,7 @@ service php5-fpm restart > /dev/null
 echo "Setting up MySQL database"
 mysqladmin -u root -prootpass create forex > /dev/null 2>&1
 echo "GRANT UPDATE,DELETE,SELECT,INSERT ON forex.* TO forex@'localhost' IDENTIFIED BY 'f0r3x'" | mysql -u root -prootpass > /dev/null 2>&1
-mysql -u root -prootpass < /vagrant/sql/forex.sql > /dev/null 2>&1
+mysql -u root -prootpass forex < /vagrant/sql/forex.sql > /dev/null 2>&1
 
 echo "Installing Composer Dependencies"
 cd /vagrant
