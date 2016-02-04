@@ -36,7 +36,7 @@ MSG;
         }
 
         foreach ($emails as $email) {
-            self::sendEmailNotification($email->email_address, $order);
+            self::sendEmail($email->email_address, $order);
         }
     }
 
