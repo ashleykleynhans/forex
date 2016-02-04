@@ -12,15 +12,33 @@ class Order extends \Phalcon\Mvc\Model
      * @param $emailAddress
      * @param $order
      */
-    private static function sendEmail($emailAddress, $order)
+    private static function sendEmail($emailAddresses, $order)
     {
+        $di = \Phalcon\DI::getDefault();
+        $mandrill = $di['mandrill'];
+
         $subject = 'Your forex order #'. $order->order_id . ' completed successfully';
 
-        $message =<<< MSG
-        Thank you for your forex order #{$order->order_id}
-MSG;
+        $message = 'Thank you for your forex order #'. $order->order_id;
 
-        mail($emailAddress, $subject, $message);
+        $message = [
+            'html'      => null,
+            'text'      => $message,
+            'subject'   => $subject,
+            'from'      => 'ashley@ashleykleynhans.com',
+            'from_name' => 'Forex Service',
+            'headers'   => ['Reply-To' => 'ashley@ashleykleynhans.com'],
+        ];
+
+        $message['to'] = array_map(function($email) {
+            return [
+                'email' => $email
+            ];
+        }, $emailAddresses);
+
+        $result = $mandrill->messages->send($message, true, 'Main Pool');
+
+        return $result;
     }
 
     /**
@@ -35,9 +53,11 @@ MSG;
             return;
         }
 
-        foreach ($emails as $email) {
-            self::sendEmail($email->email_address, $order);
-        }
+        $emailAddresses = array_map(function($email) {
+            return $email->email_address;
+        }, $emails);
+
+        self::sendEmail($emailAddresses, $order);
     }
 
     /**
@@ -144,15 +164,16 @@ MSG;
         $order = self::calculateOrder($currencyCode, $currencyAmount);
 
         try {
-
-            if ($order->create()) {
-                // Logic within sendEmailNotification() will determine whether or not emails should actually be sent
-                self::sendEmailNotification($order);
-                return $order;
-            }
+            $orderResult = $order->create();
         } catch (Exception $e) {
             // Do nothing, return default of false
             // @TODO: Possibly log the error
+        }
+
+        if ($orderResult) {
+            // Logic within sendEmailNotification() will determine whether or not emails should actually be sent
+            self::sendEmailNotification($order);
+            return $order;
         }
 
         return false;

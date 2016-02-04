@@ -50,6 +50,13 @@ $di['db'] = function () use ($config) {
 };
 
 /**
+ * Register the Mandrill Library
+ */
+$di->set('mandrill', function () use ($config) {
+    return new Mandrill($config->mandrill_api_key);
+});
+
+/**
  * Models Manager for queries
  */
 $di->setShared('modelsManager', function () {
