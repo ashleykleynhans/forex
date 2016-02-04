@@ -8,7 +8,7 @@ This project requires Vagrant to provision your development environment.
 + [Download Vagrant](https://www.vagrantup.com/downloads.html)
 + Clone the repository from Github
 ```
-https://github.com/ashleykleynhans/forex.git
+git clone https://github.com/ashleykleynhans/forex.git
 ```
 + Start the Vagrant Server
 ```
