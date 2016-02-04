@@ -19,6 +19,7 @@ class Order extends \Phalcon\Mvc\Model
 
         $subject = 'Your forex order #'. $order->order_id . ' completed successfully';
 
+        // @TODO: Change this to an HTML message
         $message = 'Thank you for your forex order #'. $order->order_id;
 
         $message = [

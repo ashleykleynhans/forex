@@ -1,5 +1,5 @@
 atlassian-ide-plugin.xml
 .idea/
 app/logs
-vendor
+/vendor/
 .vagrant
