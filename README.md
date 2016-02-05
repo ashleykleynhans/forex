@@ -66,5 +66,5 @@ Obviously change `your@email.com` to something more suitable.
 ```
 vagrant ssh
 cd /vagrant/service/app
-php -c /vagrant/provision/config/cli/cli.ini cli.php import rates
+sudo php -c /vagrant/provision/config/cli/cli.ini cli.php import rates
 ```
