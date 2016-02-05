@@ -2,12 +2,18 @@
 
 ## Assumptions
 
+### Technical Assumptions
+
 This project makes the following assumptions in order for Vagrant to be able to function correctly.
 
 + Port 8080 on your localhost is available for the application to listen on
 + Port 9090 on your localhost is available for the web service to listen on
 
 If the ports are not available, the application will not function as expected.
+
+### Design Assumptions
+
++ This project doesn't actually charge for the forex purchase, or award the buyer with any forex currency, it is just a simulator.
 
 ## Notes
 

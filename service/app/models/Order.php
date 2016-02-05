@@ -182,6 +182,10 @@ class Order extends \Phalcon\Mvc\Model
     {
         $order = self::calculateOrder($currencyCode, $currencyAmount, null, true);
 
+        if (!$order) {
+            return false;
+        }
+
         try {
             $orderResult = $order->create();
         } catch (Exception $e) {
