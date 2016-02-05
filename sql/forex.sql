@@ -1,5 +1,22 @@
-DROP TABLE IF EXISTS currencies;
+-- -----------------------------------------------------
+-- Schema forex
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `forex` DEFAULT CHARACTER SET utf8;
+USE `forex` ;
 
+-- -----------------------------------------------------
+-- Clean up if the tables already exist
+-- -----------------------------------------------------
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS currencies CASCADE;
+DROP TABLE IF EXISTS rates CASCADE;
+DROP TABLE IF EXISTS orders CASCADE;
+DROP TABLE IF EXISTS order_emails CASCADE;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- -----------------------------------------------------
+-- Table `forex`.`currencies`
+-- -----------------------------------------------------
 CREATE TABLE `currencies` (
   `currency_code` CHAR(3) NOT NULL,
   `currency_name` VARCHAR(100) NOT NULL,
@@ -19,6 +36,9 @@ VALUES
   ('EUR', 'Euro', '5.0', '2.0'),
   ('KES', 'Kenyan Shilling', '2.5', '0.0');
 
+-- -----------------------------------------------------
+-- Table `forex`.`rates`
+-- -----------------------------------------------------
 CREATE TABLE `rates` (
   `currency_code` CHAR(3) NOT NULL,
   `exchange_rate` DECIMAL(10,6) NOT NULL,
@@ -36,6 +56,9 @@ VALUES
   ('EUR', '0.884872'),
   ('KES', '103.860');
 
+-- -----------------------------------------------------
+-- Table `forex`.`orders`
+-- -----------------------------------------------------
 CREATE TABLE `orders` (
   `order_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `currency_code` CHAR(3) NOT NULL,
@@ -52,6 +75,9 @@ CREATE TABLE `orders` (
   FOREIGN KEY (`currency_code`) REFERENCES `currencies` (`currency_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- -----------------------------------------------------
+-- Table `forex`.`order_emails`
+-- -----------------------------------------------------
 CREATE TABLE `order_emails` (
   `email_id` SMALLINT(5) UNSIGNED NOT NULL AUTO_INCREMENT,
   `currency_code` CHAR(3) NOT NULL,
