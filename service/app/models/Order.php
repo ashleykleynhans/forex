@@ -8,6 +8,17 @@
 class Order extends \Phalcon\Mvc\Model
 {
     /**
+     * Calculate the ZAR value of the forex transaction
+     * @param $value
+     */
+    private static function calculateRandValue($value)
+    {
+        $currency = Currency::getCurrency('ZAR');
+
+        return $value * $currency->exchange_rate;
+    }
+
+    /**
      * Send an email notification
      * @param $emailAddresses
      * @param $order
@@ -39,7 +50,7 @@ class Order extends \Phalcon\Mvc\Model
 
         // @FIXME: Keep getting 'invalid-sender' errors for some reason
         $result = $mandrill->messages->send($message, true, 'Main Pool');
-        var_dump($result);
+        //var_dump($result);
 
         return $result;
     }
@@ -148,6 +159,8 @@ class Order extends \Phalcon\Mvc\Model
             $order->discount_amount = $order->payable_amount / 100 * $order->discount_amount;
             $order->payable_amount -= $order->discount_amount;
         }
+
+        $order->zar_amount = self::calculateRandValue($order->payable_amount);
 
         return $order;
     }

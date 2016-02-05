@@ -1,7 +1,7 @@
 function getCurrencies() {
-    $.get("http://127.0.0.1:9090/v1/currency", function() {})
+    $.get('http://127.0.0.1:9090/v1/currency', function() {})
         .done(function(response) {
-            if (response.status == 'success') {
+            if (response.status === 'success') {
                 var row = '<div class="row title">' +
                     '<div class="col-xs-6 col-md-4">Currency</div>' +
                     '<div class="col-xs-6 col-md-2">Exchange Rate</div>' +
@@ -40,10 +40,10 @@ function getCurrencies() {
 }
 
 function getCurrency(currency) {
-     $.get("http://127.0.0.1:9090/v1/currency/"+ currency, function() {})
+     $.get('http://127.0.0.1:9090/v1/currency/'+ currency, function() {})
         .done(function(response) {
-            if (response.status == 'success') {
-                $('#currency-select').html('<div id="currency" class="currency-options"></div>');
+            if (response.status === 'success') {
+                $('#currency-select').html('<h2>Enter either an amount you would to buy or pay</h2><div id="currency" class="currency-options"></div>');
 
                 var html = '<div class="row"><div class="col-xs-6 col-md-4 title">Currency</div>' +
                     '<div class="col-xs-6 col-md-4">'+ response.data.currency_name +' ('+ response.data.currency_code +')</div></div>' +
@@ -88,11 +88,11 @@ function getCurrency(currency) {
                         $(location).attr('href', '/');
                     });
             } else {
-                alert("Failed to load currency: " + currency);
+                alert('Failed to load currency: ' + currency);
             }
         })
         .fail(function() {
-            alert("Failed to load currency: " + currency);
+            alert('Failed to load currency: ' + currency);
         });
 }
 
@@ -101,40 +101,33 @@ function getQuote() {
     var currencyAmount = $('#purchase').val();
     var payableAmount = $('#pay').val();
 
-    $.post("http://127.0.0.1:9090/v1/orders/quote",
+    if (currencyAmount !== '' && !$.isNumeric(currencyAmount)) {
+        alert('The amount you specifed is not valid');
+        return false;
+    }
+
+
+    if (payableAmount !== '' && !$.isNumeric(payableAmount)) {
+        alert('The amount you specifed is not valid');
+        return false;
+    }
+
+    $.post('http://127.0.0.1:9090/v1/orders/quote',
         JSON.stringify({
             currency_code: currencyCode,
             currency_amount: currencyAmount,
             payable_amount: payableAmount
         }),
-        function() {}, "json")
+        function() {}, 'json')
         .done(function(response) {
-            if (response.status == 'success') {
-                $('#currency-select').html('<div id="currency" class="currency-options"></div>');
-
-                var html = '<div class="row">' +
-                    '<div class="row"><div class="col-xs-6 col-md-4 title">Currency Amount</div>' +
-                    '<div class="col-xs-6 col-md-4"><span class="decimal">'+ response.data.currency_amount + '</span> '+ currencyCode +'</div></div>' +
-                    '<div class="row"><div class="col-xs-6 col-md-4 title">Exchange Rate</div>' +
-                    '<div class="col-xs-6 col-md-4">'+ response.data.exchange_rate +'</div></div>' +
-                    '<div class="row"><div class="col-xs-6 col-md-4 title">Surcharge Percentage</div>' +
-                    '<div class="col-xs-6 col-md-4">'+ response.data.surcharge_percentage +'%</div></div>' +
-                    '<div class="row"><div class="col-xs-6 col-md-4 title">Surcharge Amount (USD)</div>' +
-                    '<div class="col-xs-6 col-md-4">$<span class="decimal">'+ response.data.surcharge_amount +'</span></div></div>' +
-                    '<div class="row"><div class="col-xs-6 col-md-4 title">Amount Payable (USD)</div>' +
-                    '<div class="col-xs-6 col-md-4">$<span class="decimal">'+ response.data.payable_amount +'</span></div></div>';
-                $('#currency').append(html);
-
-                $('.decimal')
-                    .each(function() {
-                        $(this).number(true, 2);
-                    });
+            if (response.status === 'success') {
+                displaySummary('Quotation', currencyCode, response, 'Payable');
 
                 html = '<div class="row" id="purchase-buttons">'+
                     '<div class="col-xs-6 col-md-2">' +
-                    '<button class="btn-lg btn-primary" id="buy" data-currency-code=="'+ response.data.currency_code +'"' +
-                    'data-currency-amoount="'+ response.data.currency_amount +'>Purchase</button></div>' +
-                    '<div class="col-xs-6 col-md-2"><button class="btn-lg btn-danger" id="cancel">Cancel</button></div></div></div>';
+                    '<button class="btn-lg btn-primary" id="buy" data-currency-code="'+ response.data.currency_code +'"' +
+                    ' data-currency-amount="'+ response.data.currency_amount +'">Purchase</button></div>' +
+                    '<div class="col-xs-6 col-md-2"><button class="btn-lg btn-danger" id="cancel">Cancel</button></div></div>';
                 $('#currency-select').append(html);
 
                 $('#buy')
@@ -147,16 +140,78 @@ function getQuote() {
                         $(location).attr('href', '/');
                     });
             } else {
-                alert("Failed to get a quote");
+                alert('Failed to get a quote');
             }
         })
         .fail(function() {
-            alert("Failed to get a quote");
+            alert('Failed to get a quote');
+        });
+}
+
+function displaySummary(title, currencyCode, response, term) {
+    $('#currency-select').html('<h2>'+ title +'</h2><div id="currency" class="currency-options"></div>');
+
+    var html = '<div class="row">';
+
+    if (response.data.order_id !== undefined) {
+        html += '<div class="row"><div class="col-xs-6 col-md-4 title">Order #</div>' +
+            '<div class="col-xs-6 col-md-4">'+ response.data.order_id +'</div></div>';
+    }
+
+    html += '<div class="row"><div class="col-xs-6 col-md-4 title">Currency Amount</div>' +
+        '<div class="col-xs-6 col-md-4"><span class="decimal">'+ response.data.currency_amount + '</span> '+ currencyCode +'</div></div>' +
+        '<div class="row"><div class="col-xs-6 col-md-4 title">Exchange Rate</div>' +
+        '<div class="col-xs-6 col-md-4">'+ response.data.exchange_rate +'</div></div>' +
+        '<div class="row"><div class="col-xs-6 col-md-4 title">Surcharge Percentage</div>' +
+        '<div class="col-xs-6 col-md-4">'+ response.data.surcharge_percentage +'%</div></div>' +
+        '<div class="row"><div class="col-xs-6 col-md-4 title">Surcharge Amount (USD)</div>' +
+        '<div class="col-xs-6 col-md-4">$<span class="decimal">'+ response.data.surcharge_amount +'</span></div></div>' +
+        '<div class="row"><div class="col-xs-6 col-md-4 title">Amount '+ term +' (USD)</div>' +
+        '<div class="col-xs-6 col-md-4">$<span class="decimal">'+ response.data.payable_amount +'</span></div></div>' +
+        '<div class="row"><div class="col-xs-6 col-md-4 title">Amount '+ term +' (ZAR)</div>' +
+        '<div class="col-xs-6 col-md-4">R<span class="decimal">'+ response.data.zar_amount +'</span></div></div>';
+    $('#currency').append(html);
+
+    $('.decimal')
+        .each(function() {
+            $(this).number(true, 2);
         });
 }
 
 function createOrder() {
-    alert('Not implemented');
+    var currencyCode = $('#buy').attr('data-currency-code');
+    var currencyAmount = $('#buy').attr('data-currency-amount');
+
+    $.post('http://127.0.0.1:9090/v1/orders',
+        JSON.stringify({
+            currency_code: currencyCode,
+            currency_amount: currencyAmount
+        }),
+        function() {}, 'json')
+        .done(function(response) {
+            if (response.status === 'success') {
+                displaySummary('Order Receipt', currencyCode, response, 'Paid');
+
+                html = '<div class="row" id="purchase-buttons">'+
+                    '<div class="col-xs-6 col-md-2"><button class="btn-lg btn-danger" id="cancel">Cancel</button></div></div>';
+                $('#currency-select').append(html);
+
+                $('#buy')
+                    .on('click', function() {
+                        createOrder();
+                    });
+
+                $('#cancel')
+                    .on('click', function() {
+                        $(location).attr('href', '/');
+                    });
+            } else {
+                alert('Failed to create order');
+            }
+        })
+        .fail(function() {
+            alert('Failed to create order');
+        });
 }
 
 $(document).ready(function() {
