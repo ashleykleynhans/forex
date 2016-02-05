@@ -79,7 +79,6 @@ class Order extends \Phalcon\Mvc\Model
         }, $emailAddresses);
 
         $result = $mandrill->messages->sendTemplate('notification', $templateContent, $message, true, 'Main Pool');
-        var_dump($result);
 
         return $result;
     }
