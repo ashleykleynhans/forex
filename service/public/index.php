@@ -78,6 +78,7 @@ try {
     $orders->setHandler('OrderController', true);
     $orders->setPrefix('/v1/orders');
     $orders->post('/', 'addOrder');
+    $orders->post('/quote', 'getQuote');
     $app->mount($orders);
 
     /**

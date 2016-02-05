@@ -23,7 +23,7 @@ class Order extends \Phalcon\Mvc\Model
         $message = 'Thank you for your forex order #'. $order->order_id;
 
         $message = [
-            'html'      => null,
+            'html'      => $message,
             'text'      => $message,
             'subject'   => $subject,
             'from'      => 'ashley@ashleykleynhans.com',
@@ -120,7 +120,7 @@ class Order extends \Phalcon\Mvc\Model
         $order->surcharge_percentage = $currency->currency_surcharge;
         $order->discount_amount = 0;
 
-        if (isset($currencyAmount)) {
+        if (!empty($currencyAmount)) {
             $order->currency_amount = $currencyAmount;
 
             // Calculate the initial currency conversion before surcharges and discounts

@@ -50,6 +50,7 @@ class ResponseMessages
     const UNABLE_TO_SAVE_ORDER = 'Unable to save order';
     const UNABLE_TO_UPDATE_ORDER = 'Unable to update order';
     const UNABLE_TO_DELETE_ORDER = 'Unable to delete order';
+    const UNABLE_TO_GET_QUOTE = 'Unable to get quote';
 
     /**
      * Currency Success Messages
