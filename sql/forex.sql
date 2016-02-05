@@ -24,6 +24,7 @@ CREATE TABLE `rates` (
   `exchange_rate` DECIMAL(10,6) NOT NULL,
   `date_created` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`currency_code`),
   FOREIGN KEY (`currency_code`) REFERENCES `currencies` (`currency_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -44,6 +45,7 @@ CREATE TABLE `orders` (
   `currency_amount` DECIMAL(12,2) UNSIGNED NOT NULL,
   `payable_amount` DECIMAL(12,2) UNSIGNED NOT NULL,
   `surcharge_amount` DECIMAL(11,2) UNSIGNED NOT NULL,
+  `zar_amount` DECIMAL(12,2) UNSIGNED NOT NULL,
   `discount_amount` DECIMAL(10,2) UNSIGNED NOT NULL,
   `date_created` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`order_id`),
