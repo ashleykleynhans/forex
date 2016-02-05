@@ -4,6 +4,9 @@ server {
     set         $root_path /vagrant/app/public;
     root        $root_path;
 
+    open_file_cache off;
+    sendfile        off;
+
     access_log  /var/log/nginx/$host-access.log;
     error_log   /var/log/nginx/$host-error.log error;
 

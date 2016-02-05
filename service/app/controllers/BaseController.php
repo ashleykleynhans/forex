@@ -7,6 +7,7 @@ class BaseController extends \Phalcon\Mvc\Controller implements IJSend
 {
     public function onConstruct()
     {
+        $this->response->setHeader('Access-Control-Allow-Origin', '*');
         $this->response->setContentType('application/json');
     }
 
