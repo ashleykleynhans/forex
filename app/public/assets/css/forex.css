@@ -2,13 +2,38 @@ body {
     margin: 50px;
 }
 
-#currencies {
-    font-size: 2em;
-    border: 1px solid black;
-    padding: 0 15px 15px 15px;
-}
-
 .title {
     background-color: #1e5eb6;
     color: white;
+}
+
+.highlight {
+    background-color: #000000;
+    color: white;
+}
+
+.row {
+    max-width: 1000px;
+}
+
+.col-centered {
+    text-align: center;
+}
+
+.currency-options, .currency-inputs {
+    font-size: 1.5em;
+    border: 1px solid black;
+    padding: 0 15px 0px 15px;
+}
+
+#currencies {
+    max-width: 1000px;
+}
+
+#currency {
+    max-width: 1000px;
+}
+
+#purchase-buttons {
+    margin-top: 20px;
 }
