@@ -71,17 +71,15 @@ class Rate extends \Phalcon\Mvc\Model
     /**
      * Update an exchange rate in the DB
      * @param $currencyCode
-     * @param $data
+     * @param $exchangeRate
      * @return bool
      */
-    public static function updateRate($currencyCode, $data)
+    public static function updateRate($currencyCode, $exchangeRate)
     {
         $rate = self::getRate($currencyCode);
 
         if ($rate) {
-            foreach ($data as $key => $value) {
-                $rate->$key = $value;
-            }
+            $rate->exchange_rate = $exchangeRate;
 
             return $rate->update();
         }

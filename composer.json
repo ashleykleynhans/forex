@@ -4,6 +4,7 @@
     "license": "proprietary",
     "require": {
         "php": ">=5.5",
-        "mandrill/mandrill": "1.0.*"
+        "mandrill/mandrill": "1.0.*",
+        "guzzlehttp/guzzle": "~5.0"
     }
 }
