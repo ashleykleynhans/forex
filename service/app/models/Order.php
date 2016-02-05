@@ -143,15 +143,12 @@ class Order extends \Phalcon\Mvc\Model
 
             // Add the surcharge to the amount payable
             $order->payable_amount += $order->surcharge_amount;
+            $order->payable_amount = round($order->payable_amount, 2, PHP_ROUND_HALF_UP);
         } else {
             $order->payable_amount = $payableAmount;
-
-            // Calculate the surcharge amount based on the amount the buyer is prepared to pay for the transaction
-            $order->surcharge_amount = ($payableAmount * 100 / $order->surcharge_percentage) - ($order->surcharge_percentage * 10);
-
-            // Deduct the surcharge from the payable amount
-            $order->currency_amount = $order->payable_amount - $order->surcharge_amount;
-            $order->payable_amount = $currencyAmount * (1 / $currency->exchange_rate);
+            $order->surcharge_amount = $payableAmount / (100 + $order->surcharge_percentage) * $order->surcharge_percentage;
+            $order->currency_amount = $payableAmount - $order->surcharge_amount;
+            $order->currency_amount = $order->currency_amount * ($currency->exchange_rate);
         }
 
         // Apply the discount if one is available
