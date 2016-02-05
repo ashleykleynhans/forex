@@ -9,6 +9,13 @@ This project makes the following assumptions in order for Vagrant to be able to 
 
 If the ports are not available, the application will not function as expected.
 
+## Notes
+
++ The web service does not implement HTTPS, which should never happen in production.
++ The web service does not implement any kind of authentication, which is a bad idea in production.
++ The web service does not implement any kind of rate limiting, which could pose a problem depending on the particular use case.
++ The web service and web application would typically each have their own unique hostname rather than different ports in production.
+
 ## Setup Instructions
 
 This project requires Vagrant to provision your development environment.
