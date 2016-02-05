@@ -1,7 +1,5 @@
 function getCurrencies() {
-    var jqxhr = $.get("http://127.0.0.1:9090/v1/currency", function() {
-
-    })
+    $.get("http://127.0.0.1:9090/v1/currency", function() {})
         .done(function(response) {
             if (response.status == 'success') {
                 var row = '<div class="row title">' +
@@ -44,9 +42,7 @@ function getCurrencies() {
 }
 
 function getCurrency(currency) {
-    var jqxhr = $.get("http://127.0.0.1:9090/v1/currency/"+ currency, function() {
-
-    })
+     $.get("http://127.0.0.1:9090/v1/currency/"+ currency, function() {})
         .done(function(response) {
             if (response.status == 'success') {
                 var html = '<div class="row"><div class="col-xs-6 col-md-4 title">Currency</div>' +
@@ -83,7 +79,7 @@ function getCurrency(currency) {
 
                 $('#buy')
                     .on('click', function() {
-                        // TODO: Implement this
+                       getQuote();
                     });
 
                 $('#cancel')
@@ -97,6 +93,10 @@ function getCurrency(currency) {
         .fail(function() {
             alert("Failed to load currency: " + currency);
         });
+}
+
+function getQuote() {
+    // TODO: Implement this
 }
 
 $(document).ready(function() {
