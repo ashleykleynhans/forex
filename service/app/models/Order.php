@@ -130,6 +130,7 @@ class Order extends \Phalcon\Mvc\Model
         $order->exchange_rate = $currency->exchange_rate;
         $order->surcharge_percentage = $currency->currency_surcharge;
         $order->discount_amount = 0;
+        $order->discount_percentage = 0;
 
         if (!empty($currencyAmount)) {
             $order->currency_amount = $currencyAmount;
@@ -146,17 +147,17 @@ class Order extends \Phalcon\Mvc\Model
             $order->payable_amount = $payableAmount;
 
             // Calculate the surcharge amount based on the amount the buyer is prepared to pay for the transaction
-            // @FIXME:
-            //$order->surcharge_amount = ($payableAmount * 100 / $order->surcharge_percentage) - ($order->surcharge_percentage * 10);
+            $order->surcharge_amount = ($payableAmount * 100 / $order->surcharge_percentage) - ($order->surcharge_percentage * 10);
 
             // Deduct the surcharge from the payable amount
-            //$order->currency_amount = $order->payable_amount - $order->surcharge_amount;
-            //$order->payable_amount = $currencyAmount * (1 / $currency->exchange_rate);
+            $order->currency_amount = $order->payable_amount - $order->surcharge_amount;
+            $order->payable_amount = $currencyAmount * (1 / $currency->exchange_rate);
         }
 
         // Apply the discount if one is available
         if ($applyDiscount && $currency->currency_discount > 0) {
-            $order->discount_amount = $order->payable_amount / 100 * $order->discount_amount;
+            $order->discount_percentage = $currency->currency_discount;
+            $order->discount_amount = $order->payable_amount / 100 * $currency->currency_discount;
             $order->payable_amount -= $order->discount_amount;
         }
 
@@ -179,7 +180,7 @@ class Order extends \Phalcon\Mvc\Model
      */
     public static function addOrder($currencyCode, $currencyAmount)
     {
-        $order = self::calculateOrder($currencyCode, $currencyAmount);
+        $order = self::calculateOrder($currencyCode, $currencyAmount, null, true);
 
         try {
             $orderResult = $order->create();

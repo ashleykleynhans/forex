@@ -165,8 +165,16 @@ function displaySummary(title, currencyCode, response, term) {
         '<div class="row"><div class="col-xs-6 col-md-4 title">Surcharge Percentage</div>' +
         '<div class="col-xs-6 col-md-4">'+ response.data.surcharge_percentage +'%</div></div>' +
         '<div class="row"><div class="col-xs-6 col-md-4 title">Surcharge Amount (USD)</div>' +
-        '<div class="col-xs-6 col-md-4">$<span class="decimal">'+ response.data.surcharge_amount +'</span></div></div>' +
-        '<div class="row"><div class="col-xs-6 col-md-4 title">Amount '+ term +' (USD)</div>' +
+        '<div class="col-xs-6 col-md-4">$<span class="decimal">'+ response.data.surcharge_amount +'</span></div></div>';
+
+    if (response.data.discount_percentage > 0) {
+        html += '<div class="row"><div class="col-xs-6 col-md-4 title">Discount Percentage</div>' +
+            '<div class="col-xs-6 col-md-4">' + response.data.discount_percentage + '%</div></div>' +
+            '<div class="row"><div class="col-xs-6 col-md-4 title">Discount Amount (USD)</div>' +
+            '<div class="col-xs-6 col-md-4">$<span class="decimal">' + response.data.discount_amount + '</span></div></div>';
+    }
+
+    html += '<div class="row"><div class="col-xs-6 col-md-4 title">Amount '+ term +' (USD)</div>' +
         '<div class="col-xs-6 col-md-4">$<span class="decimal">'+ response.data.payable_amount +'</span></div></div>' +
         '<div class="row"><div class="col-xs-6 col-md-4 title">Amount '+ term +' (ZAR)</div>' +
         '<div class="col-xs-6 col-md-4">R<span class="decimal">'+ response.data.zar_amount +'</span></div></div>';

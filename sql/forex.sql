@@ -40,6 +40,7 @@ CREATE TABLE `orders` (
   `currency_code` CHAR(3) NOT NULL,
   `exchange_rate` DECIMAL(10,6) NOT NULL,
   `surcharge_percentage` DECIMAL(3,1) NOT NULL,
+  `discount_percentage` DECIMAL(3,1) NOT NULL,
   `currency_amount` DECIMAL(12,2) UNSIGNED NOT NULL,
   `payable_amount` DECIMAL(12,2) UNSIGNED NOT NULL,
   `surcharge_amount` DECIMAL(11,2) UNSIGNED NOT NULL,

@@ -82,6 +82,11 @@ try {
     $app->mount($orders);
 
     /**
+     * CORS Headers to allow the web app to communicate with the web service
+     */
+    $app->response->setHeader('Access-Control-Allow-Origin', '*');
+
+    /**
      * Not found handler
      */
     $app->notFound(function () use ($app) {
