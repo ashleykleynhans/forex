@@ -28,9 +28,7 @@ function getCurrencies() {
                         $(this).removeClass('highlight');
                     })
                     .on('click', function() {
-                        var currencyCode = $(this).attr('data');
-                        $('#currency-select').html('<div id="currency" class="currency-options"></div>');
-                        getCurrency(currencyCode);
+                        getCurrency($(this).attr('data'));
                     });
             } else {
                 alert("Failed to load currency data");
@@ -45,6 +43,8 @@ function getCurrency(currency) {
      $.get("http://127.0.0.1:9090/v1/currency/"+ currency, function() {})
         .done(function(response) {
             if (response.status == 'success') {
+                $('#currency-select').html('<div id="currency" class="currency-options"></div>');
+
                 var html = '<div class="row"><div class="col-xs-6 col-md-4 title">Currency</div>' +
                     '<div class="col-xs-6 col-md-4">'+ response.data.currency_name +' ('+ response.data.currency_code +')</div></div>' +
                     '<div class="row"><div class="col-xs-6 col-md-4 title">Exchange Rate</div>' +
@@ -62,7 +62,8 @@ function getCurrency(currency) {
                     '<div class="col-xs-1 col-md-1">&nbsp;</div>' +
                     '<div class="col-xs-6 col-md-2"><input type="text" name="pay" id="pay" /></div></div>' +
                     '<div class="row" id="purchase-buttons">'+
-                    '<div class="col-xs-6 col-md-2"><button class="btn-lg btn-primary" id="buy">Buy '+ response.data.currency_code +'</button></div>'+
+                    '<div class="col-xs-6 col-md-2">' +
+                    '<button class="btn-lg btn-primary" id="buy" data="'+ response.data.currency_code +'">Buy '+ response.data.currency_code +'</button></div>' +
                     '<div class="col-xs-1 col-md-1">&nbsp;</div>' +
                     '<div class="col-xs-6 col-md-2"><button class="btn-lg btn-danger" id="cancel">Cancel</button></div></div></div>';
                 $('#currency-select').append(html);
@@ -96,7 +97,66 @@ function getCurrency(currency) {
 }
 
 function getQuote() {
-    // TODO: Implement this
+    var currencyCode = $('#buy').attr('data');
+    var currencyAmount = $('#purchase').val();
+    var payableAmount = $('#pay').val();
+
+    $.post("http://127.0.0.1:9090/v1/orders/quote",
+        JSON.stringify({
+            currency_code: currencyCode,
+            currency_amount: currencyAmount,
+            payable_amount: payableAmount
+        }),
+        function() {}, "json")
+        .done(function(response) {
+            if (response.status == 'success') {
+                $('#currency-select').html('<div id="currency" class="currency-options"></div>');
+
+                var html = '<div class="row">' +
+                    '<div class="row"><div class="col-xs-6 col-md-4 title">Currency Amount</div>' +
+                    '<div class="col-xs-6 col-md-4"><span class="decimal">'+ response.data.currency_amount + '</span> '+ currencyCode +'</div></div>' +
+                    '<div class="row"><div class="col-xs-6 col-md-4 title">Exchange Rate</div>' +
+                    '<div class="col-xs-6 col-md-4">'+ response.data.exchange_rate +'</div></div>' +
+                    '<div class="row"><div class="col-xs-6 col-md-4 title">Surcharge Percentage</div>' +
+                    '<div class="col-xs-6 col-md-4">'+ response.data.surcharge_percentage +'%</div></div>' +
+                    '<div class="row"><div class="col-xs-6 col-md-4 title">Surcharge Amount (USD)</div>' +
+                    '<div class="col-xs-6 col-md-4">$<span class="decimal">'+ response.data.surcharge_amount +'</span></div></div>' +
+                    '<div class="row"><div class="col-xs-6 col-md-4 title">Amount Payable (USD)</div>' +
+                    '<div class="col-xs-6 col-md-4">$<span class="decimal">'+ response.data.payable_amount +'</span></div></div>';
+                $('#currency').append(html);
+
+                $('.decimal')
+                    .each(function() {
+                        $(this).number(true, 2);
+                    });
+
+                html = '<div class="row" id="purchase-buttons">'+
+                    '<div class="col-xs-6 col-md-2">' +
+                    '<button class="btn-lg btn-primary" id="buy" data-currency-code=="'+ response.data.currency_code +'"' +
+                    'data-currency-amoount="'+ response.data.currency_amount +'>Purchase</button></div>' +
+                    '<div class="col-xs-6 col-md-2"><button class="btn-lg btn-danger" id="cancel">Cancel</button></div></div></div>';
+                $('#currency-select').append(html);
+
+                $('#buy')
+                    .on('click', function() {
+                        createOrder();
+                    });
+
+                $('#cancel')
+                    .on('click', function() {
+                        $(location).attr('href', '/');
+                    });
+            } else {
+                alert("Failed to get a quote");
+            }
+        })
+        .fail(function() {
+            alert("Failed to get a quote");
+        });
+}
+
+function createOrder() {
+    alert('Not implemented');
 }
 
 $(document).ready(function() {
