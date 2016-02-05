@@ -19,6 +19,16 @@ class Order extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Format currency values to 2 decmial points
+     * @param $value
+     * @return string
+     */
+    private static function formatValue($value)
+    {
+        return number_format(round($value, 2, PHP_ROUND_HALF_UP), 2, '.', '');
+    }
+
+    /**
      * Send an email notification
      * @param $emailAddresses
      * @param $order
@@ -28,19 +38,39 @@ class Order extends \Phalcon\Mvc\Model
         $di = \Phalcon\DI::getDefault();
         $mandrill = $di['mandrill'];
 
-        $subject = 'Your forex order #'. $order->order_id . ' completed successfully';
-
-        // @TODO: Change this to an HTML message
-        $message = 'Thank you for your forex order #'. $order->order_id;
+        $subject = 'Forex transaction #'. $order->order_id;
 
         $message = [
-            'html'      => $message,
-            'text'      => $message,
-            'subject'   => $subject,
-            'from'      => 'ashley@ashleykleynhans.com',
-            'from_name' => 'Forex Service',
-            'headers'   => ['Reply-To' => 'ashley@ashleykleynhans.com'],
+            'subject'        => $subject,
+            'from_email'     => 'noreply@ashleykleynhans.com',
+            'from_name'      => 'Forex Service',
+            'headers'        => ['Reply-To' => 'noreply@ashleykleynhans.com'],
+            'inline_css'     => true,
+            'auto_text'      => true,
+            'merge_language' => 'handlebars',
+            'merge_vars' => [
+                [
+                    'rcpt' => 'ashley.kleynhans@gmail.com',
+                    'vars' => [
+                        [ 'name' => 'order_id',             'content' => $order->order_id        ],
+                        [ 'name' => 'currency_amount',      'content' => $order->currency_amount ],
+                        [ 'name' => 'exchange_rate',        'content' => $order->exchange_rate ],
+                        [ 'name' => 'surcharge_percentage', 'content' => $order->surcharge_percentage ],
+                        [ 'name' => 'surcharge_amount',     'content' => $order->surcharge_amount ],
+                        [ 'name' => 'payable_amount',       'content' => $order->payable_amount ],
+                        [ 'name' => 'zar_amount',           'content' => $order->zar_amount ],
+                    ]
+                ]
+            ]
         ];
+
+        // Only add the discount to the template if there is actually a discount
+        if ($order->discount_percentage > 0) {
+            $message['merge_vars'][0]['vars'][] = [ 'name' => 'discount_percentage',  'content' => $order->discount_percentage ];
+            $message['merge_vars'][0]['vars'][] = [ 'name' => 'discount_amount',      'content' => $order->discount_amount ];
+        }
+
+       $templateContent = [];
 
         $message['to'] = array_map(function($email) {
             return [
@@ -48,9 +78,8 @@ class Order extends \Phalcon\Mvc\Model
             ];
         }, $emailAddresses);
 
-        // @FIXME: Keep getting 'invalid-sender' errors for some reason
-        $result = $mandrill->messages->send($message, true, 'Main Pool');
-        //var_dump($result);
+        $result = $mandrill->messages->sendTemplate('notification', $templateContent, $message, true, 'Main Pool');
+        var_dump($result);
 
         return $result;
     }
@@ -67,11 +96,9 @@ class Order extends \Phalcon\Mvc\Model
             return;
         }
 
-        $emailAddresses = [];
-
-        foreach ($emails as $email) {
-            $emailAddresses[] = $email->email_address;
-        }
+        $emailAddresses = array_map(function($email) {
+            return $email['email_address'];
+        }, $emails);
 
         self::sendEmail($emailAddresses, $order);
     }
@@ -160,6 +187,10 @@ class Order extends \Phalcon\Mvc\Model
         }
 
         $order->zar_amount = self::calculateRandValue($order->payable_amount);
+        $order->currency_amount = self::formatValue($order->currency_amount);
+        $order->surcharge_amount = self::formatValue($order->surcharge_amount);
+        $order->payable_amount = self::formatValue($order->payable_amount);
+        $order->zar_amount = self::formatValue($order->zar_amount);
 
         return $order;
     }

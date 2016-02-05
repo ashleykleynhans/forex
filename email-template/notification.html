@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+
+    <title>Forex Simulator</title>
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+    <style>
+        body {
+            margin: 50px;
+        }
+
+        h1 {
+            font-size: 4em;
+        }
+
+        th {
+            background-color: #1e5eb6;
+            color: white;
+        }
+
+        th, td {
+            padding: 15px;
+            margin: 0;
+        }
+
+        .currency-options, .currency-inputs {
+            font-size: 1.5em;
+            border: 1px solid black;
+            padding: 0 15px 0px 15px;
+        }
+    </style>
+</head>
+ <body>
+    <div id="container">
+        <div id="body">
+            <div id="currency-select">
+                <div id="currencies" class="currency-options">
+                    <table>
+                        <tr>
+                            <th class="title">Order #</th>
+                            <td>{{order_id}}</td>
+                        </tr>
+                        <tr>
+                            <th>Currency Amount</th>
+                            <td>{{currency_amount}} GBP</td>
+                        </tr>
+                        <tr>
+                            <th>Exchange Rate</th>
+                            <td>{{exchange_rate}}</td>
+                        </tr>
+                        <tr>
+                            <th>Surcharge Percentage</th>
+                            <td>{{surcharge_percentage}}%</td>
+                        </tr>
+                        <tr>
+                            <th>Surcharge Amount (USD)</th>
+                            <td>${{surcharge_amount}}</td>
+                        </tr>
+                        {{#if discount_percentage}}
+                        <tr>
+                            <th>Discount Percentage</th>
+                            <td>{{discount_percentage}}%</td>
+                        </tr>
+                        <tr>
+                            <th>Discount Amount (USD)</th>
+                            <td>${{discount_amount}}</td>
+                        </tr>
+                        {{/if}}
+                        <tr>
+                            <th>Amount Paid (USD)</th>
+                            <td>${{payable_amount}}</td>
+                        </tr>
+                        <tr>
+                            <th>Amount Paid (ZAR)</th>
+                            <td>R{{zar_amount}}</td>
+                        </tr>
+                   </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

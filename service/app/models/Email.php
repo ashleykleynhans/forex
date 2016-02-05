@@ -69,7 +69,8 @@ class Email extends \Phalcon\Mvc\Model
                     'email_status'  => 'enabled'
                 ]
             )
-            ->execute();
+            ->execute()
+            ->toArray();
     }
 
     /**
