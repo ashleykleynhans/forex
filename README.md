@@ -40,6 +40,28 @@ vagrant up
 
 All of the VM configuration resides in **Vagrantfile** and the provisioning resides in **provision/setup.sh**
 
+## Receiving Emails
+
+Emails are configured to go to `email@example.com` by default.
+
+To test that you are able to receive emails
+
+```
+vagrant ssh
+mysql -u root -p forex
+```
+
+You will be prompted to enter the root password for MySQL which is *rootpass*
+I am aware that this is insecure, but its just a development environment, and not for production purposes.
+
+Once you're at the MySQL prompt
+
+```mysql
+UPDATE order_emails SET email_address = 'your@email.com';
+```
+
+Obviously change `your@email.com` to something more suitable.
+
 ## Updating the exchange rates
 ```
 vagrant ssh
