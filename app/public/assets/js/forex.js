@@ -201,15 +201,10 @@ function createOrder() {
                 displaySummary('Order Receipt', currencyCode, response, 'Paid');
 
                 html = '<div class="row" id="purchase-buttons">'+
-                    '<div class="col-xs-6 col-md-2"><button class="btn-lg btn-danger" id="cancel">Cancel</button></div></div>';
+                    '<div class="col-xs-6 col-md-2"><button class="btn-lg btn-info" id="buy-more">Buy More</button></div></div>';
                 $('#currency-select').append(html);
 
-                $('#buy')
-                    .on('click', function() {
-                        createOrder();
-                    });
-
-                $('#cancel')
+                $('#buy-more')
                     .on('click', function() {
                         $(location).attr('href', '/');
                     });
