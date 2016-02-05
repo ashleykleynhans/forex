@@ -156,6 +156,7 @@ class Order extends \Phalcon\Mvc\Model
             $order->discount_percentage = $currency->currency_discount;
             $order->discount_amount = $order->payable_amount / 100 * $currency->currency_discount;
             $order->payable_amount -= $order->discount_amount;
+            $order->payable_amount = round($order->payable_amount, 2, PHP_ROUND_HALF_UP);
         }
 
         $order->zar_amount = self::calculateRandValue($order->payable_amount);
