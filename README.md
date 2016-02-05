@@ -39,3 +39,10 @@ vagrant up
 + [Access the application in your web browser](http://127.0.0.1:8080)
 
 All of the VM configuration resides in **Vagrantfile** and the provisioning resides in **provision/setup.sh**
+
+## Updating the exchange rates
+```
+vagrant ssh
+cd /vagrant/service/app
+php -c /vagrant/provision/config/cli/cli.ini cli.php import rates
+```
