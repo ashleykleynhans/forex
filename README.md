@@ -34,6 +34,7 @@ git clone https://github.com/ashleykleynhans/forex.git
 ```
 + Start the Vagrant Server (This process takes a while, it has to download a few things, so please wait for it to complete before proceeding to the next step)
 ```
+cd forex
 vagrant up
 ```
 + [Access the application in your web browser](http://127.0.0.1:8080)
