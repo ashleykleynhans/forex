@@ -2,6 +2,10 @@ body {
     margin: 50px;
 }
 
+h1 {
+    font-size: 4em;
+}
+
 .title {
     background-color: #1e5eb6;
     color: white;

@@ -15,7 +15,7 @@ function getCurrencies() {
                     var row = '<div class="row selectable" data="'+ data.currency_code +'">' +
                         '<div class="col-xs-6 col-md-4">'+ data.currency_name +' ('+ data.currency_code +')</div>' +
                         '<div class="col-xs-6 col-md-2">'+ data.exchange_rate + '</div>' +
-                        '<div class="col-xs-6 col-md-1 col-centered">'+ data.currency_surcharge + '</div>' +
+                        '<div class="col-xs-6 col-md-1 col-centered">'+ data.currency_surcharge + '%</div>' +
                         '</div>';
                     $('#currencies').append(row);
                 });
@@ -54,7 +54,7 @@ function getCurrency(currency) {
                     '<div class="row"><div class="col-xs-6 col-md-4 title">Exchange Rate</div>' +
                     '<div class="col-xs-6 col-md-4">'+ response.data.exchange_rate +'</div></div>' +
                     '<div class="row"><div class="col-xs-6 col-md-4 title">Surcharge</div>' +
-                    '<div class="col-xs-6 col-md-4">'+ response.data.currency_surcharge +'</div></div>';
+                    '<div class="col-xs-6 col-md-4">'+ response.data.currency_surcharge +'%</div></div>';
                 $('#currency').append(html);
 
                 html = '<div id="currency-inputs"><div class="row">' +
